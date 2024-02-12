@@ -23,9 +23,8 @@ Reference the **Modified from template** section to see the changes.
 
 ### Tests
 - Uncomment `sh` in `requirements.txt` to allow the tests in `test_sweeps.py`
-- Execute `pytest` in an interactive SLURM session on Juwels to validate `@RunIf(min_gpus=1)` in `test_train.py` ==Doesn't work, `torch.cuda.device_count() = 0` ???==
-**=> Get all tests to be executed and None skipped.** 
-
+- Execute `pytest` in an interactive SLURM session on Juwels to validate `@RunIf(min_gpus=1)` in `test_train.py` (make sure Pytorch is installed with GPU support)
+**=> Get all tests to be executed and None skipped.**
 
 ## Installation
 
