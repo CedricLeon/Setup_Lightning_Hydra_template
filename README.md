@@ -18,20 +18,21 @@ Reference the **Modified from template** section to see the changes.
 
 
 ## Modified from template
-
-- Uncomment logger in `environment.yaml` (wandb) as well as in `requirements.txt`
+### Dependencies
+- Uncomment logger in `environment.yaml` (**wandb**) as well as in `requirements.txt`
+- Uncomment `sh` in `requirements.txt` to allow the tests in `test_sweeps.py`
 
 ### Tests
-- Uncomment `sh` in `requirements.txt` to allow the tests in `test_sweeps.py`
 - Execute `pytest` in an interactive SLURM session on Juwels to validate `@RunIf(min_gpus=1)` in `test_train.py` (make sure Pytorch is installed with GPU support)
 **=> Get all tests to be executed and None skipped.**
 
 ## Installation
+There are 2 different ways you can setup your new repository: by keeping track of the template, or by starting a fresh new git repo with all the files from the template.
 
-The following way of installing is a homemade version of GitHub template. Using these would probably be more straightforward, but at least this homemade template is easy to follow 😉
+> If you plan to host your code on DLR GitLab, you should make sure that when you create the new repository you create it as a "blank project", select **<your_user>** and not **<your_group>** in the Project URL and uncheck "Initialize repository with a README".
+> Also, you should use the HTTPS URLs.
 
-### Clone the template and setup up your new remote
-> In case you are doing that on a server or with the Gitlab of your company, with specific rules. Be careful when choosing `<your_repo_remote>`
+In both cases you first need to clone the template and rename the folder with `<your_project_name>`:
 
 ```bash
 # Clone the template
@@ -39,18 +40,34 @@ git clone https://github.com/CedricLeon/Setup_Lightning_Hydra_template.git
 # Rename the folder with your project name
 mv Setup_Lightning_Hydra_template/ <your_project_name>/
 cd <your_project_name>/
+```
+Then you can either delete the remote and commit history of the template, this is the most straightforward way:
+```bash
+# Reset the git repository
+rm -rf .git/
+git init --initial-branch=main
+# Add your remote
+git remote add origin <your_remote_URL>
+# Stage and commit all files + set origin main as upstream
+git add .
+git commit -m "Initial commit"
+git push --set-upstream origin main
+```
+or you can keep the remote but rename it to `template` and add a new `origin`.
 
+I describe how to do that below, but you should know that it is just a homemade version of template repository from GitHub. It is less clean, but allows to host the new repo on a server that isn't GitHub (I didn't find a way to do that using the GitHub template feature). *If someone has a cleaner way of doing it, please open a pull-request.*
+
+```bash
 # Rename the template remote
 git remote rename origin template
 # Add your new repository remote. So, yes, you need to create it before 
 git remote add origin <your_repo_remote>
 git remote -v
 
-# --- Now it's a mess /!\ Double-check ---
 # Synchronize your (empty new repo) with a rebase to avoid non-fast-forward errors
 git pull --rebase origin main
 # Push the commit history and all the template files on the new repo (also set the origin/main branch as upstream)
-git push -u origin main
+git push --set-upstream origin main
 ```
 
 ### Set your conda environment
