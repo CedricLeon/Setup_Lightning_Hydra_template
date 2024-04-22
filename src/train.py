@@ -126,7 +126,8 @@ def main(cfg: DictConfig) -> Optional[float]:
     :return: Optional[float] with optimized metric value.
     """
     wandb_on = (
-        cfg.get("debug") is None and OmegaConf.select(cfg, "logger.wandb") is not None
+        cfg.get("debug") is None
+        and OmegaConf.select(cfg, "logger.wandb._target_") is not None
     )
     # Manual and early initialization of the W&B Run if no debug is planned
     if wandb_on:
