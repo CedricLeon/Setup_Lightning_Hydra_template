@@ -3,10 +3,10 @@ from typing import Any, Dict, List, Optional, Tuple
 import hydra
 import lightning
 import rootutils
-import torch
+import wandb
 from lightning import Callback, LightningDataModule, LightningModule, Trainer
 from lightning.pytorch.loggers import Logger
-from omegaconf import DictConfig
+from omegaconf import OmegaConf, DictConfig
 
 rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 # ------------------------------------------------------------------------------------ #
@@ -34,6 +34,7 @@ from src.utils import (
     instantiate_loggers,
     log_hyperparameters,
     task_wrapper,
+    early_wandb_initialization,
 )
 
 log = RankedLogger(__name__, rank_zero_only=True)
@@ -124,6 +125,13 @@ def main(cfg: DictConfig) -> Optional[float]:
     :param cfg: DictConfig configuration composed by Hydra.
     :return: Optional[float] with optimized metric value.
     """
+    wandb_on = (
+        cfg.get("debug") is None and OmegaConf.select(cfg, "logger.wandb") is not None
+    )
+    # Manual and early initialization of the W&B Run if no debug is planned
+    if wandb_on:
+        early_wandb_initialization(cfg)
+
     # apply extra utilities
     # (e.g. ask for tags if none are provided in cfg, print cfg tree, etc.)
     extras(cfg)
@@ -135,6 +143,10 @@ def main(cfg: DictConfig) -> Optional[float]:
     metric_value = get_metric_value(
         metric_dict=metric_dict, metric_name=cfg.get("optimized_metric")
     )
+    # Even if it is managed automatically, manually call wandb.finish()
+    # See: https://github.com/wandb/wandb/issues/6952, sometimes, offline runs seem to not upload the config or summary on W&B
+    if wandb_on:
+        wandb.finish()
 
     # return optimized metric
     return metric_value
