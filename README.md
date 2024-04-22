@@ -15,7 +15,7 @@
 This repo is just my fork from [ashleve/lightning-hydra-template](https://github.com/ashleve/lightning-hydra-template) where I modified some setup parameters to be ready to go directly after cloning.
 Reference the **Modified from template** section to see the changes. otherwise the main modifications are the following:
 
-- I set up Hydra-submitit launcher for an easier useage of SLURM, and add example config setups for clusters (JUWELS, Terrabyte)
+- I set up Hydra-submitit launcher for an easier usage of SLURM, and add example config setups for clusters (JUWELS, Terrabyte)
 - I commit to use Weight & Biases the (W&B) logger. Other loggers are still possible to use, but everything is setup by default for W&B
 - I use `wandb_osh` to support offline, real-time logging of my runs on W&B
   - To set that up you just need to turn `logger.wandb.offline` to `True` and have the "Farm" running on the login node
@@ -80,7 +80,7 @@ I describe how to do that below, but you should know that it is just a homemade 
 ```bash
 # Rename the template remote
 git remote rename origin template
-# Add your new repository remote. So, yes, you need to create it before 
+# Add your new repository remote. So, yes, you need to create it before
 git remote add origin <your_remote_URL>
 git remote -v
 
@@ -118,7 +118,7 @@ You can try running a 10 epochs training of a SimpleDenseNet on MNIST classifica
 
 ```bash
 # If on a cluster, get on a compute node with a SLURm job or an interactive session
-python src/train.py trainer=gpu # use trainer=cpu if you don't have gpus 
+python src/train.py trainer=gpu # use trainer=cpu if you don't have gpus
 ```
 
 ## Usage / Run
