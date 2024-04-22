@@ -2,9 +2,9 @@ import warnings
 from importlib.util import find_spec
 from typing import Any, Callable, Dict, Optional, Tuple
 
-from lightning_utilities.core.rank_zero import rank_zero_only
 import omegaconf
 import wandb
+from lightning_utilities.core.rank_zero import rank_zero_only
 
 from src.utils import pylogger, rich_utils
 
@@ -24,24 +24,21 @@ def early_wandb_initialization(cfg: Dict[str, Any]) -> None:
     if cfg.logger.wandb.offline:
         import wandb_osh
 
-        # Add a Lightning callback triggerring the sync after each epoch
+        # Add a Lightning callback triggering the sync after each epoch
         # Adding it this way makes it invisible for the user, but it won't appear in the HYDRA config (it will be printed in the logs though)
         with omegaconf.open_dict(cfg):
             cfg.callbacks.wandb_osh = {
                 "_target_": "wandb_osh.lightning_hooks.TriggerWandbSyncLightningCallback"
             }
         log.info(
-            f"The W&B run is set offline. The Wandb Offline Sync Hook is initialized. "
-            f"\033[31mMake sure that the wandb_osh script is running on the login node.\033[0m" # or somewhere where you have internet access
+            "The W&B run is set offline. The Wandb Offline Sync Hook is initialized. \033[31mMake sure that the wandb_osh script is running on the login node.\033[0m"  # or somewhere where you have internet access
         )
 
         # Suppress logging messages (e.g., warnings about the syncing not being fast enough)
         wandb_osh.set_log_level("ERROR")  # for wandb_osh.__version__ >= 1.2.0
 
     # Manual cast of the config from a DictConfig to a regular dict (should be supported by W&B by now)
-    wandb.config = omegaconf.OmegaConf.to_container(
-        cfg, resolve=True, throw_on_missing=True
-    )
+    wandb.config = omegaconf.OmegaConf.to_container(cfg, resolve=True, throw_on_missing=True)
     wandb.init(
         entity=cfg.logger.wandb.entity,
         project=cfg.logger.wandb.project,
@@ -51,6 +48,7 @@ def early_wandb_initialization(cfg: Dict[str, Any]) -> None:
         mode="offline" if cfg.logger.wandb.offline else "online",
         settings=wandb.Settings(start_method="thread"),
     )
+
 
 def extras(cfg: omegaconf.DictConfig) -> None:
     """Applies optional utilities before the task is started.

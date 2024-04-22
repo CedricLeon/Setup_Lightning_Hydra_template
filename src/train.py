@@ -6,7 +6,7 @@ import rootutils
 import wandb
 from lightning import Callback, LightningDataModule, LightningModule, Trainer
 from lightning.pytorch.loggers import Logger
-from omegaconf import OmegaConf, DictConfig
+from omegaconf import DictConfig, OmegaConf
 
 rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 # ------------------------------------------------------------------------------------ #
@@ -28,13 +28,13 @@ rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 
 from src.utils import (
     RankedLogger,
+    early_wandb_initialization,
     extras,
     get_metric_value,
     instantiate_callbacks,
     instantiate_loggers,
     log_hyperparameters,
     task_wrapper,
-    early_wandb_initialization,
 )
 
 log = RankedLogger(__name__, rank_zero_only=True)
@@ -78,9 +78,7 @@ def train(cfg: DictConfig) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     logger: List[Logger] = instantiate_loggers(cfg.get("logger"))
 
     log.info(f"Instantiating trainer <{cfg.trainer._target_}>")
-    trainer: Trainer = hydra.utils.instantiate(
-        cfg.trainer, callbacks=callbacks, logger=logger
-    )
+    trainer: Trainer = hydra.utils.instantiate(cfg.trainer, callbacks=callbacks, logger=logger)
 
     object_dict = {
         "cfg": cfg,
@@ -126,8 +124,7 @@ def main(cfg: DictConfig) -> Optional[float]:
     :return: Optional[float] with optimized metric value.
     """
     wandb_on = (
-        cfg.get("debug") is None
-        and OmegaConf.select(cfg, "logger.wandb._target_") is not None
+        cfg.get("debug") is None and OmegaConf.select(cfg, "logger.wandb._target_") is not None
     )
     # Manual and early initialization of the W&B Run if no debug is planned
     if wandb_on:
