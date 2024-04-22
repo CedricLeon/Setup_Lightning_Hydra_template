@@ -89,32 +89,32 @@ repos:
       - id: bandit
         args: ["-s", "B101"]
 
-  # yaml formatting
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.0.0-alpha.6
-    hooks:
-      - id: prettier
-        types: [yaml]
-        exclude: "environment.yaml"
+  # # yaml formatting
+  # - repo: https://github.com/pre-commit/mirrors-prettier
+  #   rev: v3.0.0-alpha.6
+  #   hooks:
+  #     - id: prettier
+  #       types: [yaml]
+  #       exclude: "environment.yaml"
 
-  # shell scripts linter
-  - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.9.0.2
-    hooks:
-      - id: shellcheck
+  # # shell scripts linter
+  # - repo: https://github.com/shellcheck-py/shellcheck-py
+  #   rev: v0.9.0.2
+  #   hooks:
+  #     - id: shellcheck
 
-  # md formatting
-  - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.16
-    hooks:
-      - id: mdformat
-        args: ["--number"]
-        additional_dependencies:
-          - mdformat-gfm
-          - mdformat-tables
-          - mdformat_frontmatter
-          # - mdformat-toc
-          # - mdformat-black
+  # # md formatting
+  # - repo: https://github.com/executablebooks/mdformat
+  #   rev: 0.7.16
+  #   hooks:
+  #     - id: mdformat
+  #       args: ["--number"]
+  #       additional_dependencies:
+  #         - mdformat-gfm
+  #         - mdformat-tables
+  #         - mdformat_frontmatter
+  #         # - mdformat-toc
+  #         # - mdformat-black
 
   # word spelling linter
   - repo: https://github.com/codespell-project/codespell
@@ -125,23 +125,23 @@ repos:
           - --skip=logs/**,data/**,*.ipynb
           # - --ignore-words-list=abc,def
 
-  # jupyter notebook cell output clearing
-  - repo: https://github.com/kynan/nbstripout
-    rev: 0.6.1
-    hooks:
-      - id: nbstripout
+  # # jupyter notebook cell output clearing
+  # - repo: https://github.com/kynan/nbstripout
+  #   rev: 0.6.1
+  #   hooks:
+  #     - id: nbstripout
 
-  # jupyter notebook linting
-  - repo: https://github.com/nbQA-dev/nbQA
-    rev: 1.6.3
-    hooks:
-      - id: nbqa-black
-        args: ["--line-length=99"]
-      - id: nbqa-isort
-        args: ["--profile=black"]
-      - id: nbqa-flake8
-        args:
-          [
-            "--extend-ignore=E203,E402,E501,F401,F841",
-            "--exclude=logs/*,data/*",
-          ]
+  # # jupyter notebook linting
+  # - repo: https://github.com/nbQA-dev/nbQA
+  #   rev: 1.6.3
+  #   hooks:
+  #     - id: nbqa-black
+  #       args: ["--line-length=99"]
+  #     - id: nbqa-isort
+  #       args: ["--profile=black"]
+  #     - id: nbqa-flake8
+  #       args:
+  #         [
+  #           "--extend-ignore=E203,E402,E501,F401,F841",
+  #           "--exclude=logs/*,data/*",
+  #         ]
