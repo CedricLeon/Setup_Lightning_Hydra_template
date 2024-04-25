@@ -117,7 +117,7 @@ As a general comment, I advise to run a mock run (**/!\ not with `debug=fdr` /!\
 You can try running a 10 epochs training of a SimpleDenseNet on MNIST classification problem to check if everything runs smooth. If you already logged on W&B on your system you should not need to do anything else for the setup to be complete.
 
 ```bash
-# If on a cluster, get on a compute node with a SLURm job or an interactive session
+# If on a cluster, get on a compute node with a SLURM job or an interactive session
 python src/train.py trainer=gpu # use trainer=cpu if you don't have gpus
 ```
 
