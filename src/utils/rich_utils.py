@@ -20,9 +20,9 @@ def print_config_tree(
     print_order: Sequence[str] = (
         "data",
         "model",
-        "callbacks",
-        "logger",
         "trainer",
+        "logger",
+        "callbacks",
         "paths",
         "extras",
     ),
