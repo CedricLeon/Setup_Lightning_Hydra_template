@@ -10,7 +10,7 @@ overrides = ["logger=[]"]
 
 
 @RunIf(sh=True)
-@pytest.mark.slow
+# @pytest.mark.slow
 def test_experiments(tmp_path: Path) -> None:
     """Test running all available experiment configs with `fast_dev_run=True.`
 

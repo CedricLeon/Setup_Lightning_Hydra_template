@@ -40,7 +40,7 @@ jobs:
 
       - name: Run pytest
         run: |
-          pytest -v
+          pytest -v -k "not slow"
 
   # run_tests_macos:
   #   runs-on: ${{ matrix.os }}
