@@ -17,6 +17,8 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v2
+        with:
+          python-version: 3.11 # Force 'setuptools' to be installed, see https://ericmjl.github.io/blog/2023/10/29/how-to-debug-a-modulenotfounderror-in-the-interrogate-pre-commit-hook/
 
       - name: Run pre-commits
         uses: pre-commit/action@v2.0.3
