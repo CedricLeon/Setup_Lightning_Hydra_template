@@ -37,10 +37,17 @@ Reference the **Modified from template** section to see the changes. otherwise t
   - `wandb_osh` (Wandb Offline Sync Hook)
 - Uncomment `sh` in `requirements.txt` to allow the tests in `test_sweeps.py`
 
-### How to test
+### CI/CD and Testing
 
-- Execute `pytest` in an interactive SLURM session on Juwels to validate `@RunIf(min_gpus=1)` in `test_train.py` (make sure Pytorch is installed with GPU support)
+- *To execute all tests:* Execute `pytest` in an interactive SLURM session on Juwels to validate `@RunIf(min_gpus=1)` in `test_train.py` (make sure Pytorch is installed with GPU support)
 **=> Get all tests to be executed and None skipped.**
+- I removed MacOS and Windows deployment test, as well as most of the different versions of python tested (reason: save computation resources)
+- The tests to be executed in CI/CD are the `"not slow"` ones, for the same reason mentioned above
+
+## Features to come, @TODO
+
+- Redirect logs in a subdirectory specific for each experiment (Not that easy because it's impossible to interpolate in the Default List, see this [stackoverflow](https://stackoverflow.com/questions/67280041/interpolation-in-hydras-defaults-list-cause-and-error))
+- Add a submitit setup for Terrabyte
 
 ## Installation
 
@@ -93,6 +100,7 @@ git push --set-upstream origin main
 ### Set your conda environment
 
 ```bash
+# Force python version 3.11 for compatibility reasons (pytorch)
 conda create -n <your_env_name> python=3.11
 conda activate <your_env_name>
 
@@ -109,6 +117,7 @@ I have fixed some parameters with generic names (e.g., `logger.wandb.project: "l
 Here is a list you should check and replace:
 
 - In `configs/logger/wandb.yaml`: `logger.wandb.team` and `logger.wandb.project`
+- If you plan to use multiruns, in `configs/hydra/launcher/` change your account settings and  
 
 As a general comment, I advise to run a mock run (**/!\ not with `debug=fdr` /!\**, it hides most of the config) and have a careful look at your config. @TODO
 
@@ -125,26 +134,58 @@ python src/train.py trainer=gpu # use trainer=cpu if you don't have gpus
 
 @TODO: refine the usage examples with how I use experiments, etc.
 
-Train model with default configuration
+### Classic usage
+
+The method I describe below is **my** preferred way of using this template. Of course, that's only a theory and you are free to organize yourself differently, the repository is very flexible.
+However, after trying out different setups I often found myself lost, e.g., trying to find out why a parameter kept its old value when I was overriding it. In any case, [Hydra documentation](https://hydra.cc/docs/patterns/configuring_experiments/) is your best friend.
+
+Now that you are warned, here is are my best practices in short: I recommend always creating runs from an experiment config.
+This enforces better hierarchy and organization, while having the advantage of grouping "all" modifications in a single file, making modifications easy.
+
+See below an example to run with a chosen experiment configuration from [configs/experiment/](configs/experiment/):
 
 ```bash
-# train on CPU
-python src/train.py trainer=cpu
-
-# train on GPU
-python src/train.py trainer=gpu
+python src/train.py experiment=example
 ```
 
-Train model with chosen experiment configuration from [configs/experiment/](configs/experiment/)
+### Overriding HYDRA config from CLI
+
+From here, you can override minor parameters from the CLI for a quick check or a specific run:
 
 ```bash
-python src/train.py experiment=experiment_name.yaml
+python src/train.py experiment=example trainer.max_epochs=2
 ```
 
-You can override any parameter from command line like this
+Whenever you find yourself, running several times similar commands with a high number of overrides, this is probably a good time to create a new `experiment.yaml`.
+
+### Overriding a full config group
+
+Sometimes, you might want to change big parts of your experiment config without wanting to redefine a new experiment, then, you can override packages.
+Examples include checking run time on a different hardware, estimating results on a different dataset, or logging to csv because you're a boomer.
 
 ```bash
-python src/train.py trainer.max_epochs=20 data.batch_size=64
+# Train on CPU
+python src/train.py experiment=example trainer=cpu
+# Quickly test another dataset
+python src/train.py experiment=example data=kodak
+# Change the logger
+python src/train.py experiment=example logger=csv
+```
+
+### Debugging
+
+Debugging is a instance of the previous case, where you override the debug package from the CLI. However, it's so common and important it deserves its own section.
+Firstly, whenever you specify `debug` there won't be any logging or callbacks and the run will be executed without multithreading on CPU.
+The best example is the `fast_dev_run` option of the Lightning Trainer which will run 1 step of training, validation and test. This is what 99% of the time.
+
+```bash
+python src/train.py experiment=example debug=fdr
+```
+
+If you still want some logging, or want to debug on GPU, etc. you can always specify that **after** your debug setup.
+
+```bash
+python src/train.py experiment=example debug=default trainer=gpu
 ```
 
 ## Run tests
