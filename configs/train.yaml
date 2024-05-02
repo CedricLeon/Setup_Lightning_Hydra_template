@@ -26,7 +26,7 @@ defaults:
   # debugging config (enable through command line, e.g. `python train.py debug=default)
   - debug: null
 
-# Specify logs subdirectory path, it is overriden in each experiment file   
+# Specify logs subdirectory path, it is overridden in each experiment file
 task_name: "default"
 
 # Tags to help you identify your experiments, you should overwrite this in experiment configs
