@@ -56,6 +56,8 @@ Reference the **Modified from template** section to see the changes. otherwise t
 
 ## Installation
 
+### Setting up Git
+
 There are 2 different ways you can setup your new repository: by keeping track of the template, or by starting a fresh new git repo with all the files from the template.
 
 > If you plan to host your code on DLR GitLab, you should make sure that when you create the new repository you create it as a "blank project", select **<your_user>** and not **<your_group>** in the Project URL and uncheck "Initialize repository with a README".
@@ -71,6 +73,8 @@ mv Setup_Lightning_Hydra_template/ <your_project_name>/
 cd <your_project_name>/
 ```
 
+#### Re-initializating Git history
+
 Then you can either delete the remote and commit history of the template, this is the most straightforward way:
 
 ```bash
@@ -85,7 +89,9 @@ git commit -m "Initial commit"
 git push --set-upstream origin main
 ```
 
-or you can keep the remote but rename it to `template` and add a new `origin`.
+#### Keeping track of the template Git history (*homemade*)
+
+Or you can keep the remote but rename it to `template` and add a new `origin`.
 
 I describe how to do that below, but you should know that it is just a homemade version of template repository from GitHub. It is less clean, but allows to host the new repo on a server that isn't GitHub (I didn't find a way to do that using the GitHub template feature). *If someone has a cleaner way of doing it, please open a pull-request.*
 
@@ -116,6 +122,20 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 pip install -r requirements.txt
 ```
 
+### Optional: Setup `pre-commit` hooks
+
+In case you deleted `.git` after cloning the template, you have to reinstall pre-commit.
+It's also a good idea to run it against all files (if you have any) for the first time.
+
+```bash
+pre-commit install
+pre-commit run --all-files
+```
+
+You can test that pre-commit is nicely setup with a dummy commit, or just by committing the changes of the next sections.
+
+> Note: if you are using VSCode commit system, the output logs are redirected towards the `OUTPUT/Git` console. Nevertheless, you should still get an error message if you messed something.
+
 ### Personalize project template parameters
 
 I have fixed some parameters with generic names (e.g., `logger.wandb.project: "lightning-hydra-template"`).
@@ -126,7 +146,7 @@ Here is a list you should check and replace:
 
 As a general comment, I advise to run a mock run (**/!\ not with `debug=fdr` /!\**, it hides most of the config) and have a careful look at your config. @TODO
 
-### Test the environment
+### Optional: Test the environment
 
 You can try running a 10 epochs training of a SimpleDenseNet on MNIST classification problem to check if everything runs smooth. If you already logged on W&B on your system you should not need to do anything else for the setup to be complete.
 
