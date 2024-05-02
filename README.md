@@ -27,6 +27,8 @@ Reference the **Modified from template** section to see the changes. otherwise t
 
 - Add deterministic training support (can be unset from config)
 - Add the W&B offline management using `wandb_osh` (automatically adds the Lightning Callback when the run is set offline)
+- Redirecting logs to subdirectories specific for each experiment
+- Automating job submission on cluster using `hydra-submitit-launcher` through `--multirun` mode
 
 ### More dependencies
 
@@ -46,8 +48,11 @@ Reference the **Modified from template** section to see the changes. otherwise t
 
 ## Features to come, @TODO
 
-- Redirect logs in a subdirectory specific for each experiment (Not that easy because it's impossible to interpolate in the Default List, see this [stackoverflow](https://stackoverflow.com/questions/67280041/interpolation-in-hydras-defaults-list-cause-and-error))
+- Upgrade and "automatise" the `task_name` parameter generation:
+  - Either by using a specific name parameter in each Config Group option (config file) and `**kwargs` in the corresponding Modules.
+  - Or by making it general and global in the "root" config file using Hydra interpolation system. Not that easy because it's impossible to interpolate in the Default List, see this [stackoverflow](https://stackoverflow.com/questions/67280041/interpolation-in-hydras-defaults-list-cause-and-error).
 - Add a submitit setup for Terrabyte
+- Increase test coverage, and provide classic examples to test Lightning Datamodule and Modules.
 
 ## Installation
 
@@ -111,13 +116,13 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 pip install -r requirements.txt
 ```
 
-### Overwrite project template parameters
+### Personalize project template parameters
 
 I have fixed some parameters with generic names (e.g., `logger.wandb.project: "lightning-hydra-template"`).
 Here is a list you should check and replace:
 
 - In `configs/logger/wandb.yaml`: `logger.wandb.team` and `logger.wandb.project`
-- If you plan to use multiruns, in `configs/hydra/launcher/` change your account settings and  
+- If you plan to use multiruns, in `configs/hydra/launcher/` change your account settings: `hydra.launcher.account` and if necessary your favorite `partition`.
 
 As a general comment, I advise to run a mock run (**/!\ not with `debug=fdr` /!\**, it hides most of the config) and have a careful look at your config. @TODO
 
