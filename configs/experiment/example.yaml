@@ -12,9 +12,12 @@ defaults:
 # all parameters below will be merged with parameters from default configurations set above
 # this allows you to overwrite only specified parameters
 
+# The task name determines the logs path, by convention use <task>/<dataset>/<model>
+task_name: train/mnist/simple_dense_net
+
 tags: ["mnist", "simple_dense_net"]
 
-seed: 12345
+seed: 42
 
 trainer:
   min_epochs: 10
