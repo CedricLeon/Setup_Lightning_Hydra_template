@@ -152,7 +152,7 @@ You can try running a 10 epochs training of a SimpleDenseNet on MNIST classifica
 
 ```bash
 # If on a cluster, get on a compute node with a SLURM job or an interactive session
-python src/train.py trainer=gpu # use trainer=cpu if you don't have gpus
+python src/train.py experiment=example trainer=gpu # use trainer=cpu if you don't have gpus
 ```
 
 ## Usage / Run
