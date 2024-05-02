@@ -141,8 +141,9 @@ You can test that pre-commit is nicely setup with a dummy commit, or just by com
 I have fixed some parameters with generic names (e.g., `logger.wandb.project: "lightning-hydra-template"`).
 Here is a list you should check and replace:
 
-- In `configs/logger/wandb.yaml`: `logger.wandb.team` and `logger.wandb.project`
-- If you plan to use multiruns, in `configs/hydra/launcher/` change your account settings: `hydra.launcher.account` and if necessary your favorite `partition`.
+- Documentation: Change the title of this `README.md` (and most likely also delete the crap I wrote 😉)
+- W&B: In `configs/logger/wandb.yaml`, `team: "my-wandb-team"` and `project: "lightning-hydra-template"`
+- SLURM: If you plan to use multiruns, in `configs/hydra/launcher/` change your account settings in the different cluster setups: `account: "your_juwels_project"` (if necessary, also update your favorite `partition`).
 
 As a general comment, I advise to run a mock run (**/!\ not with `debug=fdr` /!\**, it hides most of the config) and have a careful look at your config. @TODO
 
