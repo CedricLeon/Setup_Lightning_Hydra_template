@@ -13,10 +13,10 @@ def run_sh_command(command: List[str]) -> None:
 
     :param command: A list of shell commands as strings.
     """
-    msg = None
+    msg_stderr_output = None
     try:
         sh.python(command)
     except sh.ErrorReturnCode as e:
-        msg = e.stderr.decode()
-    if msg:
-        pytest.fail(msg=msg)
+        msg_stderr_output = e.stderr.decode()
+    if msg_stderr_output:
+        pytest.fail(reason=msg_stderr_output)  # msg argument deprecated (use reason instead)
