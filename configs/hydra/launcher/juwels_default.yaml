@@ -1,0 +1,27 @@
+# Resources:
+# - this tutorial: https://www.aidanscannell.com/notes/hpc-cluster/hydra/
+# - JUWELS documentation: https://apps.fz-juelich.de/jsc/hps/juwels/batchsystem.html#allocations-jobs-and-job-steps
+# - SLURM usage with Lightning: https://lightning.ai/docs/pytorch/stable/clouds/cluster_advanced.html
+
+defaults:
+  - submitit_slurm
+
+_target_: hydra_plugins.hydra_submitit_launcher.submitit_launcher.SlurmLauncher
+account: "your_juwels_project" # to modify
+partition: booster
+timeout_min: 60
+max_num_timeout: 10
+nodes: 1
+gres: gpu:4 # Automatically added by JSC submission filter
+
+# --- Optional? ---
+#cpus_per_gpu: 96
+#name: ${hydra.job.name}_${data}_${model}
+#signal_delay_s: 600
+#additional_parameters: {}
+
+# @TODO: Try to combine stdout and stderr in the same file (see about forcing stderr in red in .bashrc)
+# Problem: Submitit forces the --output and --error in the srun command (doesn't use --output and --error of sbatch)
+# additional_parameters: # --output and --error are SLURM parameters not yet supported by submitit
+#   output: "%A_%a/%A_%a_0_log.log" # See if I might need to add the full path, e.g., /p/project/hai_sar_dc/RS_DC/logs/train/multiruns/2024-03-14_14-49-03/.submitit/%A_%a/%A_%a_0_log.out
+#   error: "%A_%a/%A_%a_0_log.log"
