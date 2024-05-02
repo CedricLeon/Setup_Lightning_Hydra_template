@@ -103,7 +103,7 @@ pre-commit run --all-files
 
 You can test that pre-commit is nicely setup with a dummy commit, or just by committing the changes of the next sections.
 
-> Note: if you are using VSCode commit system, the output logs are redirected towards the `OUTPUT/Git` console. Nevertheless, you should still get an error message if you messed something.
+> Note: if you are using VSCode commit system, the output logs are redirected towards the `OUTPUT/Git` console. Nevertheless, you should still get an error message if you messed something. Spoiler: the error message is not helpful, but redirects you towards the git logs.
 
 ### Personalize project template parameters
 
