@@ -1,0 +1,3 @@
+dir: data/processed/my_dataset
+seed: 42
+loss: "mse"

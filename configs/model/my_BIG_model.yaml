@@ -1,0 +1,7 @@
+model:
+  name: “my_BIG_model”
+  nb_channels: 256
+  loss: "custom"
+  optimizer:
+    name: "Adam"
+    lr: 1e-4
