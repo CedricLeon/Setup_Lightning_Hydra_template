@@ -1,3 +1,8 @@
+defaults:
+- data: my_dataset
+- model: null
+- _self_
+
 dir: data/processed/my_dataset
 seed: 42
 loss: "mse"

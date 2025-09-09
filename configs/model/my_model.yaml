@@ -1,5 +1,5 @@
-model:
-  name: “my_model”
-  nb_channels: 128
-  loss: "mse"
-  lr: 1e-4
+# @package model
+name: “my_model”
+nb_channels: 128
+loss: "mse"
+lr: 1e-4
