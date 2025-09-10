@@ -1,4 +1,5 @@
 import hydra
+# omegaconf is a package thatd eals with YAML configs, Hydra is built on top of it
 from omegaconf import DictConfig, OmegaConf
 
 @hydra.main(version_base=None, config_path="../configs", config_name="basics.yaml")
