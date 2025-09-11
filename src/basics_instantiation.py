@@ -33,7 +33,6 @@ def my_app(cfg: DictConfig) -> None:
         print(model)
     else:
         print("No model specified in the config.")
-        return
 
 if __name__ == "__main__":
     my_app()
