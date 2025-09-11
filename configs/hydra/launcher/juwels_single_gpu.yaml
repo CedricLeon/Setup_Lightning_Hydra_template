@@ -1,5 +1,0 @@
-defaults:
-  - juwels_default
-
-timeout_min: 100
-nodes: 1
