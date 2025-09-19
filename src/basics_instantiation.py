@@ -30,7 +30,10 @@ def my_app(cfg: DictConfig) -> None:
     print(" --------------------- Model instantiation ----------------- ")
     if cfg.get("model") is not None:
         model = hydra.utils.instantiate(cfg.model)
-        print(model)
+        if isinstance(model, (MyModel, MyBIGModel)):
+            print(model)
+        else:
+            print(f"{cfg.model} was not configured correctly.")
     else:
         print("No model specified in the config.")
 
