@@ -22,6 +22,8 @@ The main modifications are the following:
   - Switch `logger.wandb.offline` to `True`
   - Have the "Farm" running on the login node, i.e., with the command `wandb-osh`
 
+If you're just getting started with Hydra and Lightning, go check the [workshop](https://github.com/CedricLeon/Setup_Lightning_Hydra_template/tree/workshop) branch. It has less features than the main, but serves better educational purposes.
+
 ## Installation
 
 ### Setting up Git
