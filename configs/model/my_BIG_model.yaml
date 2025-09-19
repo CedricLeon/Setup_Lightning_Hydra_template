@@ -1,5 +1,4 @@
-# @package model
-name: “my_BIG_model”
+name: "my_BIG_model"
 nb_channels: 256
 loss: "custom"
 optimizer:

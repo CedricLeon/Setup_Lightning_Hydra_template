@@ -1,4 +1,3 @@
-# @package data
 dir: data/processed/my_dataset
 batch_size: 32
 num_workers: 11
