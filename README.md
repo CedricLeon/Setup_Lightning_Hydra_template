@@ -13,11 +13,12 @@
 ## Description
 
 This repo is just my fork from [ashleve/lightning-hydra-template](https://github.com/ashleve/lightning-hydra-template) where I modified some setup parameters to be ready to go directly after cloning.
-Reference the **Modified from template** section to see the changes. otherwise the main modifications are the following:
+Reference the [Modified from template](#modified-from-template) section to see the detailed changes or check [Features to come](#features-to-come) if you're motivate for a PR 😁.
 
-- I set up `hydra-submitit-launcher` for an easier usage of SLURM, and add example config setups for clusters (JUWELS, Terrabyte to come)
-- I commit to use Weight & Biases (W&B) logger. Other loggers are still possible to use, but everything is setup by default for W&B.
-- I use [wandb_osh](https://github.com/klieret/wandb-offline-sync-hook) to support offline, real-time logging of my runs on W&B. In this template, setting up `wandb_osh` is as easy as that:
+The main modifications are the following:
+- `hydra-submitit-launcher` is set up for an easier usage of SLURM, and add example config setups for clusters (JUWELS, Terrabyte to come)
+- Weight & Biases (W&B) logger became the default logger. Other loggers are still possible to use, but everything is setup by default for W&B.
+- W&B is improved with [wandb_osh](https://github.com/klieret/wandb-offline-sync-hook) to support offline, real-time logging of my runs on W&B. In this template, setting up wandb_osh is as easy as that:
   - Switch `logger.wandb.offline` to `True`
   - Have the "Farm" running on the login node, i.e., with the command `wandb-osh`
 
@@ -109,10 +110,10 @@ You can test that pre-commit is nicely setup with a dummy commit, or just by com
 
 I have fixed some parameters that are project specific with generic names (e.g., `logger.wandb.project: "lightning-hydra-template"`). Here is a list you should check and replace:
 
-- **Documentation**: Change the title of this `README.md` (and most likely also delete the crap I wrote 😉)
-- **W&B**: In `configs/logger/wandb.yaml`, `team: "my-wandb-team"` and `project: "lightning-hydra-template"`
+- **Documentation**: Change the title of this *README* (and most likely also delete the crap I wrote 😉)
+- **W&B**: In [configs/logger/wandb.yaml](configs/logger/wandb.yaml), `team: "my-wandb-team"` and `project: "lightning-hydra-template"`
 - **Submitit** (if you plan to use multiruns):
-  - In `configs/hydra/launcher/` change your account settings in the different cluster setups: `account: "your_juwels_project"` (if necessary, also update your favorite `partition`).
+  - In [configs/hydra/launcher/](configs/hydra/launcher/) change your account settings in the different cluster setups: `account: "your_juwels_project"` (if necessary, also update your favorite `partition`).
   - You can specify the launcher through your command, with the option `hydra.launcher.partition=juwels_single_gpu` for example
   - Otherwise, in the experiment file, add a configuration for `hydra-submitit-launcher`:
 
@@ -139,21 +140,9 @@ python src/train.py -m experiment=example trainer=gpu hydra.launcher.partition=d
 
 ## Usage / Run
 
-@TODO: refine the usage examples with how I use experiments, etc.
+Thanks to Hydra flexibility you can use this template basically as you will, i.e., feel free to setup your configurations as convoluted as you'd like (Hi! [@dcodrut](https://github.com/dcodrut) ☺️).
 
-### Classic usage
-
-The method I describe below is **my** preferred way of using this template. Of course, that's only a theory and you are free to organize yourself differently, the repository is very flexible.
-However, after trying out different setups I often found myself lost, e.g., trying to find out why a parameter kept its old value when I was overriding it. In any case, [Hydra documentation](https://hydra.cc/docs/patterns/configuring_experiments/) is your best friend.
-Now that you are warned, here is are my best practices.
-
-In short, I recommend always creating runs from an experiment config. This enforces better hierarchy and organization, while having the advantage of grouping "all" modifications in a single file, making modifications easy.
-
-See below an example to run with a chosen experiment configuration from [configs/experiment/](configs/experiment/):
-
-```bash
-python src/train.py experiment=example
-```
+However, if you want to configure your code as intended by [@ashleve](https://github.com/ashleve/lightning-hydra-template) check [this Hydra explanation](https://hydra.cc/docs/patterns/configuring_experiments/), it nicely explains why creating a new file that overrides most of your config for each experiment is a good idea.
 
 ### Overriding HYDRA config from CLI
 
@@ -163,7 +152,7 @@ From here, you can override minor parameters from the CLI for a quick check or a
 python src/train.py experiment=example trainer.max_epochs=2
 ```
 
-Whenever you find yourself, running several times similar commands with a high number of overrides, this is probably a good time to create a new `experiment.yaml`.
+Whenever you find yourself running several times similar commands with a high number of overrides, this is probably a good time to create a new `experiment.yaml`.
 
 ### Overriding a full config group
 
@@ -195,6 +184,9 @@ If you still want some logging, or want to debug on GPU, etc. you can always spe
 python src/train.py experiment=example debug=default trainer=gpu
 ```
 
+### Sweeping & Hyperparameter search
+@TODO: Add explanations how to run hyperparameter searches using W&B and Hydra, see [their nice integration post](https://docs.wandb.ai/guides/integrations/hydra/).
+
 ## Modified from template
 
 This section simply lists the major changes I brought to the original template [ashleve/lightning-hydra-template](https://github.com/ashleve/lightning-hydra-template). It's also here that I give a big shoutout to **ashleve**, in addition of the impressive work behind such repo, he is also on most of the Issues and PR I came across when I was setting this fork.
@@ -222,23 +214,13 @@ This section simply lists the major changes I brought to the original template [
 - I removed MacOS and Windows deployment test, as well as most of the different versions of python tested (reason: save compute resources)
 - The tests to be executed in CI/CD are the `"not slow"` ones, for the same reason mentioned above
 
-## Features to come, @TODO
+## Features to come
+@TODO
 
 - [ ] Add a submitit setup for Terrabyte
 - [ ] Increase test coverage, and provide classic examples to test Lightning Datamodule and Modules.
-- [ ] Upgrade and "automate" the `task_name` parameter generation:
+- [ ] Upgrade and "automate" the `task_name` parameter generation. There is probably a smart way to do so with [Hydra Resolvers](https://hydra.cc/docs/configure_hydra/intro/#resolvers-provided-by-hydra):
   - Either by using a specific name parameter in each Config Group option (config file) and `**kwargs` in the corresponding Modules.
   - Or by making it general and global in the "root" config file using Hydra interpolation system. Not that easy because it's impossible to interpolate in the Default List, see this [stackoverflow](https://stackoverflow.com/questions/67280041/interpolation-in-hydras-defaults-list-cause-and-error).
 - [ ] Add my Lightning Callback plotting reconstructions/predictions every $N$ epochs
 
-## Run tests
-
-@TODO: Specify how to add tests and provide examples. But nobody likes testing.
-
-```bash
-# run all tests
-pytest
-
-# run all tests except the ones marked as slow
-pytest -k "not slow"
-```
