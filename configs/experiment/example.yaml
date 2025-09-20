@@ -20,8 +20,7 @@ tags: ["mnist", "simple_dense_net"]
 seed: 42
 
 trainer:
-  min_epochs: 10
-  max_epochs: 10
+  max_epochs: 1 # WORKSHOP: For demonstration purposes
   gradient_clip_val: 0.5
 
 model:
@@ -35,8 +34,3 @@ model:
 
 data:
   batch_size: 64
-
-logger:
-  wandb:
-    tags: ${tags}
-    group: "mnist"
