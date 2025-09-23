@@ -12,6 +12,7 @@ class SimpleDenseNet(nn.Module):
         lin2_size: int = 256,
         lin3_size: int = 256,
         output_size: int = 10,
+        dropout_prob: float = 0.5,
     ) -> None:
         """Initialize a `SimpleDenseNet` module.
 
@@ -27,12 +28,15 @@ class SimpleDenseNet(nn.Module):
             nn.Linear(input_size, lin1_size),
             nn.BatchNorm1d(lin1_size),
             nn.ReLU(),
+            nn.Dropout(dropout_prob),
             nn.Linear(lin1_size, lin2_size),
             nn.BatchNorm1d(lin2_size),
             nn.ReLU(),
+            nn.Dropout(dropout_prob),
             nn.Linear(lin2_size, lin3_size),
             nn.BatchNorm1d(lin3_size),
             nn.ReLU(),
+            nn.Dropout(dropout_prob),
             nn.Linear(lin3_size, output_size),
         )
 

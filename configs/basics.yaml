@@ -1,7 +1,14 @@
 defaults:
 - data: my_dataset
-- model: null
+- model: my_model
 - _self_
 
 seed: 42
 loss: "mse"
+
+hydra:
+  run:
+    dir: logs_hydra/runs/${now:%Y-%m-%d}_${now:%H-%M-%S}
+  sweep:
+    dir: logs_hydra/multiruns/${now:%Y-%m-%d}_${now:%H-%M-%S}
+    subdir: ${hydra.job.num}

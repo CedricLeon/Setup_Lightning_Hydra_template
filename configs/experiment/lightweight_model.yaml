@@ -1,0 +1,37 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /data: mnist
+  - override /model: mnist
+  - override /callbacks: default
+  - override /trainer: gpu
+  - override /logger: tensorboard
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+# The task name determines the logs path, by convention use <task>/<dataset>/<model>
+task_name: train/mnist/simple_dense_net
+
+tags: ["mnist", "simple_dense_net"]
+
+seed: 42
+
+trainer:
+  max_epochs: 3
+  gradient_clip_val: 0.5
+
+model:
+  optimizer:
+    lr: 0.002
+  net:
+    lin1_size: 64
+    lin2_size: 128
+    lin3_size: 32
+  compile: false
+
+data:
+  batch_size: 64

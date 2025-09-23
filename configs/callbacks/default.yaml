@@ -2,6 +2,7 @@ defaults:
   - model_checkpoint
   - early_stopping
   - model_summary
+  - mnist_visualization
   - _self_
 
 model_checkpoint:

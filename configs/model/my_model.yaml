@@ -1,3 +1,4 @@
+_target_: src.basics_instantiation.MyModel
 name: "my_model"
 nb_channels: 128
 loss: "mse"

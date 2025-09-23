@@ -1,6 +1,9 @@
+_target_: src.basics_instantiation.MyBIGModel
 name: "my_BIG_model"
 nb_channels: 256
 loss: "custom"
 optimizer:
+  _target_: torch.optim.Adam
+  _partial_: True
   name: "Adam"
   lr: 1e-4

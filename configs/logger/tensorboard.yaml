@@ -5,6 +5,6 @@ tensorboard:
   save_dir: "${paths.output_dir}/tensorboard/"
   name: null
   log_graph: False
-  default_hp_metric: False
+  default_hp_metric: True
   prefix: ""
   # version: ""

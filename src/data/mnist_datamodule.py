@@ -76,7 +76,11 @@ class MNISTDataModule(LightningDataModule):
         self.save_hyperparameters(logger=False)
 
         # data transformations
-        self.transforms = transforms.Compose(
+        self.transforms_train = transforms.Compose(
+            [transforms.GaussianBlur(kernel_size=(5, 5)),
+            transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))]
+        )
+        self.transforms_valtest = transforms.Compose(
             [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))]
         )
 
@@ -126,7 +130,7 @@ class MNISTDataModule(LightningDataModule):
         # load and split datasets only if not loaded already
         if not self.data_train and not self.data_val and not self.data_test:
             trainval_data = MNIST(self.hparams.data_dir, train=True)
-            self.data_test = MNIST(self.hparams.data_dir, train=False, transform=self.transforms)
+            self.data_test = MNIST(self.hparams.data_dir, train=False, transform=self.transforms_valtest)
             self.data_train, self.data_val = random_split(
                 dataset=trainval_data,
                 lengths=self.hparams.train_val_split,
@@ -138,8 +142,8 @@ class MNISTDataModule(LightningDataModule):
             self.data_train = copy.deepcopy(self.data_train)
             self.data_val = copy.deepcopy(self.data_val)
 
-            self.data_val.dataset.transform = self.transforms
-            self.data_train.dataset.transform = self.transforms
+            self.data_val.dataset.transform = self.transforms_valtest
+            self.data_train.dataset.transform = self.transforms_train
 
     def train_dataloader(self) -> DataLoader[Any]:
         """Create and return the train dataloader.
