@@ -1,7 +1,9 @@
 import os
+import platform
 from pathlib import Path
 
 import pytest
+import torch
 from hydra.core.hydra_config import HydraConfig
 from omegaconf import DictConfig, open_dict
 
@@ -62,6 +64,10 @@ def test_train_epoch_double_val_loop(cfg_train: DictConfig) -> None:
     train(cfg_train)
 
 
+@pytest.mark.skipif(
+    platform.system() == "Windows" and torch.cuda.device_count() == 0,
+    reason="CPU DDP sim flaky on Windows without GPUs (gloo device issue, see https://github.com/pytorch/pytorch/issues/150381)",
+)
 @pytest.mark.slow
 def test_train_ddp_sim(cfg_train: DictConfig) -> None:
     """Simulate DDP (Distributed Data Parallel) on 2 CPU processes.
