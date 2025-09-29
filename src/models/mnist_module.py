@@ -43,7 +43,7 @@ class MNISTLitModule(LightningModule):
         self,
         net: torch.nn.Module,
         optimizer: torch.optim.Optimizer,
-        scheduler: torch.optim.lr_scheduler,
+        scheduler: torch.optim.lr_scheduler._LRScheduler,
         compile: bool,
     ) -> None:
         """Initialize a `MNISTLitModule`.
@@ -75,7 +75,7 @@ class MNISTLitModule(LightningModule):
         self.val_loss = MeanMetric()
         self.test_loss = MeanMetric()
 
-        # for tracking best so far validation accuracy
+        # for tracking the best validation accuracy across epochs
         self.val_acc_best = MaxMetric()
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
