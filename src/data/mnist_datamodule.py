@@ -1,8 +1,9 @@
+import copy
 from typing import Any, Dict, Optional, Tuple
 
 import torch
 from lightning import LightningDataModule
-from torch.utils.data import ConcatDataset, DataLoader, Dataset, random_split
+from torch.utils.data import DataLoader, Dataset, random_split
 from torchvision.datasets import MNIST
 from torchvision.transforms import transforms
 
@@ -55,7 +56,7 @@ class MNISTDataModule(LightningDataModule):
     def __init__(
         self,
         data_dir: str = "data/",
-        train_val_test_split: Tuple[int, int, int] = (55_000, 5_000, 10_000),
+        train_val_split: Tuple[int, int] = (55_000, 5_000),
         batch_size: int = 64,
         num_workers: int = 0,
         pin_memory: bool = False,
@@ -63,7 +64,7 @@ class MNISTDataModule(LightningDataModule):
         """Initialize a `MNISTDataModule`.
 
         :param data_dir: The data directory. Defaults to `"data/"`.
-        :param train_val_test_split: The train, validation and test split. Defaults to `(55_000, 5_000, 10_000)`.
+        :param train_val_split: The train and validation split. Defaults to `(55_000, 5_000)`.
         :param batch_size: The batch size. Defaults to `64`.
         :param num_workers: The number of workers. Defaults to `0`.
         :param pin_memory: Whether to pin memory. Defaults to `False`.
@@ -124,14 +125,21 @@ class MNISTDataModule(LightningDataModule):
 
         # load and split datasets only if not loaded already
         if not self.data_train and not self.data_val and not self.data_test:
-            trainset = MNIST(self.hparams.data_dir, train=True, transform=self.transforms)
-            testset = MNIST(self.hparams.data_dir, train=False, transform=self.transforms)
-            dataset = ConcatDataset(datasets=[trainset, testset])
-            self.data_train, self.data_val, self.data_test = random_split(
-                dataset=dataset,
-                lengths=self.hparams.train_val_test_split,
+            trainval_data = MNIST(self.hparams.data_dir, train=True)
+            self.data_test = MNIST(self.hparams.data_dir, train=False, transform=self.transforms)
+            self.data_train, self.data_val = random_split(
+                dataset=trainval_data,
+                lengths=self.hparams.train_val_split,
                 generator=torch.Generator().manual_seed(42),
             )
+
+            # When using random_split, the Subset objects still point to the same underlying dataset
+            # Create copies to avoid overwriting the transform for both train and val sets when the transforms differ
+            self.data_train = copy.deepcopy(self.data_train)
+            self.data_val = copy.deepcopy(self.data_val)
+
+            self.data_val.dataset.transform = self.transforms
+            self.data_train.dataset.transform = self.transforms
 
     def train_dataloader(self) -> DataLoader[Any]:
         """Create and return the train dataloader.
