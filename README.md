@@ -14,9 +14,12 @@
 
 This specific branch was created for a workshop given at the Munich Autumn School for Remote Sensing 2025 (MARS25), it adds a few files to get started with Hydra and PyTorch Lightning and simplifies a few features of the repository.
 
-If you want to use get started with this template you can check this Google Collab notebook and the presentation slides that go with it.
+If you want to use get started with this template you can check this [Google Collab notebook](https://colab.research.google.com/drive/1ZovNE3evNOpmOe-iLMWw4JJ31MTElqHI?usp=sharing) and the [presentation slides](https://docs.google.com/presentation/d/1VhEDW5qo41qpVaxhAQvj74T8lBcQTQs2/edit?usp=sharing&ouid=106418272699017544973&rtpof=true&sd=true) that go with it.
 
-Credits and thanks to Cedric Leonard (@CedricLeon) Aaron Banze (@aaronbanse), and Codrut Diaconu (@dcodrut).
+Credits and thanks to Aaron Banze (@aaronbanse) and Codrut Diaconu (@dcodrut).
+
+
+***
 
 This repository is just a fork from [ashleve/lightning-hydra-template](https://github.com/ashleve/lightning-hydra-template) where I modified some setup parameters to be ready to go directly after cloning.
 Reference the **Modified from template** section to see the changes. otherwise the main modifications are the following:
