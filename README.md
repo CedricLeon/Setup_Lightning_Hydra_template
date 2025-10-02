@@ -1,4 +1,4 @@
-# Your Project Name
+# Hydra-Lightning Template: Workshop MARS2025
 <div align="center">
 
 <a href="https://pytorch.org/get-started/locally/"><img alt="PyTorch" src="https://img.shields.io/badge/PyTorch-ee4c2c?logo=pytorch&logoColor=white"></a>
@@ -12,7 +12,13 @@
 
 ## Description
 
-This repo is just my fork from [ashleve/lightning-hydra-template](https://github.com/ashleve/lightning-hydra-template) where I modified some setup parameters to be ready to go directly after cloning.
+This specific branch was created for a workshop given at the Munich Autumn School for Remote Sensing 2025 (MARS25), it adds a few files to get started with Hydra and PyTorch Lightning and simplifies a few features of the repository.
+
+If you want to use get started with this template you can check this Google Collab notebook and the presentation slides that go with it.
+
+Credits and thanks to Cedric Leonard (@CedricLeon) Aaron Banze (@aaronbanse), and Codrut Diaconu (@dcodrut).
+
+This repository is just a fork from [ashleve/lightning-hydra-template](https://github.com/ashleve/lightning-hydra-template) where I modified some setup parameters to be ready to go directly after cloning.
 Reference the **Modified from template** section to see the changes. otherwise the main modifications are the following:
 
 - I set up `hydra-submitit-launcher` for an easier usage of SLURM, and add example config setups for clusters (JUWELS, Terrabyte to come)
